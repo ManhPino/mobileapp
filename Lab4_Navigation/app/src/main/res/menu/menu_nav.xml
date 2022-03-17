@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Home"/>
+    <item android:title="Favourite"/>
+    <item android:title="MyPage"/>
+    <group>
+       <item android:title="Account">
+           <menu>
+               <item android:title="Contact"/>
+               <item android:title="Company Information"/>
+           </menu>
+       </item>
+    </group>
+</menu>
