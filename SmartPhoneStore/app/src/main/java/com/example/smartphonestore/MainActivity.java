@@ -1,6 +1,7 @@
 package com.example.smartphonestore;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,7 +30,8 @@ private ImageButton imgbtn;
         setContentView(R.layout.activity_main);
         productArrayList = new ArrayList<>();
         database = new ConnectDB(this,"SmartPhoneStore.sqlite",null,1);
-        database.createTable();        AnhXa();
+        database.createTable();
+        AnhXa();
         displayData();
         setupForRecycleView();
     }
@@ -67,6 +69,8 @@ private ImageButton imgbtn;
         });
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(customAdapterRecycleView);
+        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this,DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(itemDecoration);
     }
     public static void displayData(){
         String query = "SELECT * FROM SmartPhoneStore";

@@ -43,8 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <ImageView
-                    android:adjustViewBounds="true"
-                    android:id="@+id/img_product_smartphone"
+                    android:id="@+id/imageSmartphone"
                     android:scaleType="fitXY"
                     android:padding="5dp"
                     android:layout_width="120dp"

@@ -15,6 +15,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.bumptech.glide.Glide;
 import com.example.smartphonestore.IClickOnListener;
 import com.example.smartphonestore.R;
 import com.example.smartphonestore.SmartPhoneEditor;
@@ -48,10 +49,11 @@ public class CustomAdapterRecycleView extends RecyclerView.Adapter<CustomAdapter
     @Override
     public void onBindViewHolder(@NonNull ViewHolderPhone holder, int position) {
         Product p = productArrayList.get(position);
-        Picasso.get().load("https://cf.shopee.vn/file/68150522399c189b3484e7862b4fdd58").into(holder.img_smartphone);
+        Glide.with(context.getApplicationContext())
+                .load(p.getLink())
+                .into(holder.img_smartphone);
         holder.txt_namesmartphone.setText(p.getTensp());
-        DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-        holder.txt_pricesmartphone.setText("Giá: "+ decimalFormat.format(Float.parseFloat(p.getPrice()))+" VNĐ");
+        holder.txt_pricesmartphone.setText("Giá: "+p.getPrice()+" VNĐ");
         holder.txt_descriptionsmartphone.setText(p.getDes());
         holder.txt_descriptionsmartphone.setMaxLines(2);
         holder.txt_deleteproduct.setOnClickListener(new View.OnClickListener() {
@@ -86,7 +88,7 @@ public class CustomAdapterRecycleView extends RecyclerView.Adapter<CustomAdapter
             txt_deleteproduct = itemView.findViewById(R.id.txt_deleteproduct);
             txt_editproduct = itemView.findViewById(R.id.txt_editproduct);
             cardView = itemView.findViewById(R.id.cardView_smartphone);
-            img_smartphone = itemView.findViewById(R.id.img_product_smartphone);
+            img_smartphone = itemView.findViewById(R.id.imageSmartphone);
             txt_namesmartphone = itemView.findViewById(R.id.txt_product_nameSmartphone);
             txt_pricesmartphone = itemView.findViewById(R.id.txt_product_priceSmartphone);
             txt_descriptionsmartphone = itemView.findViewById(R.id.txt_product_descriptionSmartphone);

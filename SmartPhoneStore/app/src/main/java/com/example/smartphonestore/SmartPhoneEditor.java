@@ -29,10 +29,14 @@ private Product p;
     public void getData(){
         Bundle bundle = getIntent().getExtras();
         p = (Product) bundle.getSerializable("infor");
-        edtname.setText(p.getTensp());
-        edtdes.setText(p.getDes());
-        edtprice.setText(p.getPrice());
-        edtlink.setText(p.getLink());
+        String name = p.getTensp();
+        String price = p.getPrice();
+        String des = p.getDes();
+        String link = p.getLink();
+        edtname.setText(name);
+        edtdes.setText(des);
+        edtlink.setText(link);
+        edtprice.setText(price);
     }
     public void updateDatabase(){
         btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -48,12 +52,16 @@ private Product p;
                 String des =  edtdes.getText().toString();
                 String price = edtprice.getText().toString();
                 String link = edtlink.getText().toString();
-                database.update_database(name,des,price,link,p.getId());
-                MainActivity.productArrayList.clear();
-                MainActivity.customAdapterRecycleView.notifyDataSetChanged();
-                MainActivity.displayData();
-                Toast.makeText(getApplicationContext(), "Sửa thành công", Toast.LENGTH_SHORT).show();
-                finish();
+                if(name.equals("") && des.equals("") && price.equals("") && link.equals("")){
+                    Toast.makeText(SmartPhoneEditor.this, "Vui lòng nhập đủ thông tin", Toast.LENGTH_SHORT).show();;
+                }else{
+                    database.update_database(name,des,link,price,p.getId());
+                    MainActivity.productArrayList.clear();
+                    MainActivity.customAdapterRecycleView.notifyDataSetChanged();
+                    MainActivity.displayData();
+                    Toast.makeText(getApplicationContext(), "Sửa thành công", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
             }
         });
     }
