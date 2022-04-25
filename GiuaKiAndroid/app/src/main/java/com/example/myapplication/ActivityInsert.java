@@ -6,8 +6,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.example.myapplication.api.RetrofitConfig;
 import com.example.myapplication.database.Database;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ActivityInsert extends AppCompatActivity {
     public EditText mName,mEmail,mContact,mAddress;
@@ -30,10 +36,19 @@ public class ActivityInsert extends AppCompatActivity {
                 String email = mEmail.getText().toString();
                 String contact =mContact.getText().toString();
                 String address = mAddress.getText().toString();
-                database.insert_into_database(name,email,contact,address);
-                MainActivity.infor.clear();
+                RetrofitConfig.retrofit.insert_infor(name,email,contact,address).enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        Toast.makeText(getApplicationContext(), "Thêm thành công", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+
+                    }
+                });
                 MainActivity.inforAdapter.notifyDataSetChanged();
-                MainActivity.displayData();
+                new MainActivity().displayData();
                 finish();
             }
         });

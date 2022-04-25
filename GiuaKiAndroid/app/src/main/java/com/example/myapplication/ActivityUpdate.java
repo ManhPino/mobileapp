@@ -43,9 +43,6 @@ public class ActivityUpdate extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 database.update_database(name.getText().toString() , email.getText().toString(), contact.getText().toString() , address.getText().toString() , f.getId());
-                MainActivity.infor.clear();
-                MainActivity.inforAdapter.notifyDataSetChanged();
-                MainActivity.displayData();
                 finish();
             }
         });

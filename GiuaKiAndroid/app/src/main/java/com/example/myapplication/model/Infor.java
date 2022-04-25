@@ -56,4 +56,15 @@ public class Infor implements Serializable {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    @Override
+    public String toString() {
+        return "Infor{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", contact='" + contact + '\'' +
+                ", address='" + address + '\'' +
+                '}';
+    }
 }

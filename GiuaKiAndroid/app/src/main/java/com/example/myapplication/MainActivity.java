@@ -12,13 +12,20 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.myapplication.adapter.InforAdapter;
+import com.example.myapplication.api.RetrofitConfig;
 import com.example.myapplication.database.Database;
 import com.example.myapplication.model.Infor;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 public class MainActivity extends AppCompatActivity {
     public static ArrayList<Infor> infor;
+    ArrayList<Infor> information = new ArrayList<>();
     public static InforAdapter inforAdapter;
     public static Database database;
     public static RecyclerView rcv ;
@@ -27,12 +34,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        infor = new ArrayList<>();
-        database = new Database(this,"Information.sqlite",null,1);
-        database.createTable();
-        rcv = findViewById(R.id.rcv_main);
-        setUpRecycleView();
+        anhXa();
         displayData();
+    }
+    public void anhXa(){
+        rcv = findViewById(R.id.rcv_main);
         btnAdd = findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,16 +48,26 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    public void setUpRecycleView(){
+    public void setUpRecycleView(ArrayList<Infor> information){
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         inforAdapter = new InforAdapter(new IClick() {
             @Override
             public void mDelete(Infor f) {
-                 database.deletedata_into_databse(f.getId());
-                 Toast.makeText(MainActivity.this, "Xóa thành công", Toast.LENGTH_SHORT).show();
-                 infor.clear();
-                 inforAdapter.notifyDataSetChanged();
-                 displayData();
+               RetrofitConfig.retrofit.detelte_infor(f.getId()).enqueue(new Callback<String>() {
+                   @Override
+                   public void onResponse(Call<String> call, Response<String> response) {
+                       String data = response.body();
+                       Toast.makeText(MainActivity.this, data, Toast.LENGTH_SHORT).show();
+                       information.clear();
+                       inforAdapter.notifyDataSetChanged();
+                       displayData();
+                   }
+
+                   @Override
+                   public void onFailure(Call<String> call, Throwable t) {
+
+                   }
+               });
             }
 
             @Override
@@ -62,24 +78,21 @@ public class MainActivity extends AppCompatActivity {
                   intent.putExtras(bundle);
                   startActivity(intent);
             }
-        },infor);
+        },information);
         rcv.setAdapter(inforAdapter);
         rcv.setLayoutManager(linearLayoutManager);
     }
-    public static void displayData(){
-        String query = "SELECT * FROM Information";
-        Cursor cursor = database.getData(query);
-        if(cursor != null){
-            while (cursor.moveToNext()){
-                int id = cursor.getInt(0);
-                String name = cursor.getString(1);
-                String des = cursor.getString(2);
-                String link = cursor.getString(3);
-                String price = cursor.getString(4);
-                infor.add(new Infor(id,name,des,link,price));
+    public void displayData(){
+        RetrofitConfig.retrofit.getinfor().enqueue(new Callback<ArrayList<Infor>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Infor>> call, Response<ArrayList<Infor>> response) {
+                information = response.body();
+                setUpRecycleView(information);
             }
-        }else {
-            return;
-        }
+            @Override
+            public void onFailure(Call<ArrayList<Infor>> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Ok bạn ơi", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
