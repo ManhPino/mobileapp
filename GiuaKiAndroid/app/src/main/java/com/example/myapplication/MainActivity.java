@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -53,30 +54,38 @@ public class MainActivity extends AppCompatActivity {
         inforAdapter = new InforAdapter(new IClick() {
             @Override
             public void mDelete(Infor f) {
-               RetrofitConfig.retrofit.detelte_infor(f.getId()).enqueue(new Callback<String>() {
-                   @Override
-                   public void onResponse(Call<String> call, Response<String> response) {
-                       String data = response.body();
-                       Toast.makeText(MainActivity.this, data, Toast.LENGTH_SHORT).show();
-                       information.clear();
-                       inforAdapter.notifyDataSetChanged();
-                       displayData();
-                   }
+               if(ActivityLogin.checkrole == true){
+                   RetrofitConfig.retrofit.detelte_infor(f.getId()).enqueue(new Callback<String>() {
+                       @Override
+                       public void onResponse(Call<String> call, Response<String> response) {
+                           String data = response.body();
+                           Toast.makeText(MainActivity.this, data, Toast.LENGTH_SHORT).show();
+                           information.clear();
+                           inforAdapter.notifyDataSetChanged();
+                           displayData();
+                       }
 
-                   @Override
-                   public void onFailure(Call<String> call, Throwable t) {
+                       @Override
+                       public void onFailure(Call<String> call, Throwable t) {
 
-                   }
-               });
+                       }
+                   });
+               }else{
+                   Log.d("AAA","Ban khong co quyen xoa");
+               }
             }
 
             @Override
             public void mEdit(Infor f) {
-                  Intent intent = new Intent(MainActivity.this,ActivityUpdate.class);
-                  Bundle bundle = new Bundle();
-                  bundle.putSerializable("infor",f);
-                  intent.putExtras(bundle);
-                  startActivity(intent);
+                  if(ActivityLogin.checkrole == true){
+                      Intent intent = new Intent(MainActivity.this,ActivityUpdate.class);
+                      Bundle bundle = new Bundle();
+                      bundle.putSerializable("infor",f);
+                      intent.putExtras(bundle);
+                      startActivity(intent);
+                  }else{
+                      Log.d("AAA","Ban khong co quyen xoa");
+                  }
             }
         },information);
         rcv.setAdapter(inforAdapter);

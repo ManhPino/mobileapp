@@ -4,12 +4,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.example.myapplication.api.RetrofitConfig;
 import com.example.myapplication.database.Database;
 import com.example.myapplication.model.Infor;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ActivityUpdate extends AppCompatActivity {
     Infor f;
@@ -42,8 +49,22 @@ public class ActivityUpdate extends AppCompatActivity {
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                database.update_database(name.getText().toString() , email.getText().toString(), contact.getText().toString() , address.getText().toString() , f.getId());
-                finish();
+                if(ActivityLogin.checkrole == true){
+                    RetrofitConfig.retrofit.edit(name.getText().toString() , email.getText().toString(), contact.getText().toString() , address.getText().toString() , f.getId()).enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            Toast.makeText(getApplicationContext(), "Update thành công", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t) {
+                            Toast.makeText(getApplicationContext(), "Update không thành công", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    finish();
+                }else{
+                    Log.d("AAA","Ban khong co quyen update");
+                }
             }
         });
 

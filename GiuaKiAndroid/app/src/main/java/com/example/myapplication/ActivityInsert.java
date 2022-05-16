@@ -3,6 +3,7 @@ package com.example.myapplication;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,24 +33,28 @@ public class ActivityInsert extends AppCompatActivity {
         insert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String name = mName.getText().toString();
-                String email = mEmail.getText().toString();
-                String contact =mContact.getText().toString();
-                String address = mAddress.getText().toString();
-                RetrofitConfig.retrofit.insert_infor(name,email,contact,address).enqueue(new Callback<String>() {
-                    @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-                        Toast.makeText(getApplicationContext(), "Thêm thành công", Toast.LENGTH_SHORT).show();
-                    }
+                if(ActivityLogin.checkrole == true){
+                    String name = mName.getText().toString();
+                    String email = mEmail.getText().toString();
+                    String contact =mContact.getText().toString();
+                    String address = mAddress.getText().toString();
+                    RetrofitConfig.retrofit.insert_infor(name,email,contact,address).enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            Toast.makeText(getApplicationContext(), "Thêm thành công", Toast.LENGTH_SHORT).show();
+                        }
 
-                    @Override
-                    public void onFailure(Call<String> call, Throwable t) {
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t) {
 
-                    }
-                });
-                MainActivity.inforAdapter.notifyDataSetChanged();
-                new MainActivity().displayData();
-                finish();
+                        }
+                    });
+                    MainActivity.inforAdapter.notifyDataSetChanged();
+                    new MainActivity().displayData();
+                    finish();
+                }else{
+                    Log.d("AAA","Ban khong co quyen insert");
+                }
             }
         });
     }

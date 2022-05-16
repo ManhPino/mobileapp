@@ -1,17 +1,10 @@
 package com.example.myapplication.model;
 
 public class Account {
-    public int id ;
     public String username;
     public String password;
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getUsername() {
         return username;
